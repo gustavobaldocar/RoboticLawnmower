@@ -1,9 +1,9 @@
 # Project: 
-Automated Robotic Lawnmower Simulator - MVP with K8s Scaling and CI/CD
+## Automated Robotic Lawnmower Simulator - MVP with K8s Scaling and CI/CD
 
-# Author: gustavobaldocarvalho @ yahoo.com
+## Author: gustavobaldocarvalho @ yahoo.com
 
-# Version: 31.01.2026 - Creation
+### Version: 31.01.2026 - Creation
 
 ---
 
@@ -78,6 +78,13 @@ convert it to JSON Files in ./results folder
 * Obs: For sake of simplicity, the input error Handling was descoped from this first version in both 
 Core Engine and App Logic.
 
+* The Containerisation is implemented by using Docker image
+
+* Distribution and scalability is implemented with Kubernetes (k8s)
+
+* Git Repo CI is implemented with mypy and pytest to check code
+
+* Git Repo CD is implemented with integration of existing Kubernetes infrastructure
 ---
 
 ## Phase C: Detailed Design and Implementation
@@ -118,7 +125,7 @@ Core Engine and App Logic.
 * Install Project Dependencies: 
     ```python -m pip install -r ./docker/lawnmower_sim_docker_requirements.txt```
 
-### Python Auto-Test Setup (pytet)
+### Python Auto-Test Setup (pytest)
 
 * Install Testing Tool: 
     ```python -m pip install pytest```
