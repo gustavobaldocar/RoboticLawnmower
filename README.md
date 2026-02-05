@@ -148,13 +148,16 @@ for git platform
 
 * act app reads your ci.yml and pulls Docker images that mimic GitHub's runners.
 * Using Powershell in admin mode
+
     ```Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))```
 * Install: 
     ```choco install act-cli```
 * Build infrastructure for Github
-    ```mkdir .github
+    ``` 
+    mkdir .github
     mkdir .github/workflows
-    docker pull catthehacker/ubuntu:act-latest```
+    docker pull catthehacker/ubuntu:act-latest
+    ```
         
 ### Implementation
 
@@ -215,8 +218,10 @@ and avoiding need for aditional schema validation steps in CI/CD
     * Then is run API specifying the ports
     * Docker Images typically contains python:3.9-slim to keep the image lightweight
     * To Build docker image: 
-        ```docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .```
-        ```docker save -o ./docker/lawnmower_sim_image.tar lawnmower_sim_docker_image```
+        ```
+        docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .
+        docker save -o ./docker/lawnmower_sim_image.tar lawnmower_sim_docker_image
+        ```
 * Cotainer
     * An executing instantiation of the docker image
     * Because Docker containers are "ephemeral", files will disappear as soon as container is deleted
@@ -244,8 +249,10 @@ and avoiding need for aditional schema validation steps in CI/CD
     * Enable Kubernetes in Docker Desktop
     * Start Kubernetes Cluster (takes some min)
     * Install Metrics Server in the Cluster
-        ```kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml```
-        ```kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'```
+        ```
+        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+        kubectl patch deployment metrics-server -n kube-system --type='json' -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+        ```
     * Check Kubernetes: 
         ```kubectl cluster-info```
 * k8s deployment: 
@@ -274,9 +281,11 @@ and avoiding need for aditional schema validation steps in CI/CD
         * Obs: When this is done, Pods are created with running containers.
         * Since Containers star API by default, the App is ready to be called from browser
     * To execute a cli:
-        ```kubectl get pods -l app=lawnmower-sim
+        ```
+        kubectl get pods -l app=lawnmower-sim
         kubectl exec <pod-name> -- python ./python/lawnmower_cli_api.py --cli
-        kubectl exec <pod-name> -- python ./python/lawnmower_cli_api.py --cli ./tests/lawnmower_scenario01_valid.txt```
+        kubectl exec <pod-name> -- python ./python/lawnmower_cli_api.py --cli ./tests/lawnmower_scenario01_valid.txt
+        ```
     * To check all:
         ```kubectl get all```
     * List the pods:
@@ -425,8 +434,10 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
     
 * Test k8s and Scalability
     * Terminal1: Run k8s cluster
-        ```kubectl apply -f ./k8s```
-        ```kubectl get pods -l app=lawnmower-sim```
+        ```
+        kubectl apply -f ./k8s
+        kubectl get pods -l app=lawnmower-sim
+        ```
         There should be 3 pods running.
     * Terminal2: Monitor HPA
         ```kubectl get hpa lawnmower-sim-hpa --watch```
@@ -435,7 +446,8 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
         ```kubectl top pods```  
         number of pods might change
     * Terminal4,5,6,7...: Generate Load in as many terminal needed to trigger scaling of pods
-        ```# Get a valid test file from your project
+        ```
+        # Get a valid test file from your project
         $testFile = "./tests/lawnmower_scenario01_valid.txt"
         $url = "http://localhost:8000/simulate"
 
@@ -444,7 +456,8 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
             curl.exe -X POST $url -F "file=@$testFile"
             
             Write-Host "Request sent at $(Get-Date)" -ForegroundColor Green
-        }```
+        }
+        ```
 
 ### Design to Requirements Traceability
         
@@ -477,34 +490,38 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
 1. Initialize and Prepare the Repository
     * Open a terminal in your project root
     
-    * 1. Initialize the local Git repository
+    * Initialize the local Git repository
     ```git init```
 
-    * 2. Add all files (including hidden folders like .github)
+    * Add all files (including hidden folders like .github)
     ```git add .```
 
-    * 3. Create commit with a message
+    * Create commit with a message
     ```git commit -am "Initial commit: Robotic Lawnmower Simulator MVP with K8s Scaling and CI/CD"```
 
 2. Connect to GitHub
     * Login to GitHub
     * Create Repository RoboticLawnmower without License or Readme file
     
-    * 4. Link local folder to your remote GitHub repo
-    ```git remote set-url origin https://github.com/gustavobaldocar/RoboticLawnmower.git
-    git remote -v```
+    * Link local folder to your remote GitHub repo
+    ```
+    git remote set-url origin https://github.com/gustavobaldocar/RoboticLawnmower.git
+    git remote -v
+    ```
     
-    * 5. Set the branch name to main
-    ```git branch --unset-upstream
-    git branch -M main```
+    * Set the branch name to main
+    ```
+    git branch --unset-upstream
+    git branch -M main
+    ```
     
-    * 6. Push the code from Local to Repo
+    * Push the code from Local to Repo
     ```git push -u origin main --force```
     
-    * 7. Pull the code from Repo to Local (For the 1st time)
+    * Pull the code from Repo to Local (For the 1st time)
     ```git clone https://github.com/gustavobaldocar/RoboticLawnmower.git```
     
-    * 8. Pull the code from Repo to Local
+    * Pull the code from Repo to Local
     ```git pull origin main```    
 
 ---
