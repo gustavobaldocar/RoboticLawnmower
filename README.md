@@ -1,3 +1,12 @@
+# Project: 
+# Automated Robotic Lawnmower Simulator
+# MVP with K8s Scaling and CI/CD
+#
+#
+# Author: gustavobaldocarvalho @ yahoo.com
+#
+# Version: 31.01.2026 - Creation
+
 ---
 
 # Robotic Lawnmower Simulator
@@ -452,3 +461,30 @@ Run all Tests using guidelins in Section 2 above. This time Docker image is mana
         While acceptable for an MVP, adding basic checks for malformed .txt files would 
         enhance the "User Experience" criteria.
 
+## Project Storage
+
+    1. Initialize and Prepare the Repository
+        Open a terminal in your project root
+        
+        # 1. Initialize the local Git repository
+        git init
+
+        # 2. Add all files (including hidden folders like .github)
+        git add .
+
+        # 3. Create your first commit with a professional message
+        git commit -m "Initial commit: Robotic Lawnmower Simulator MVP with K8s Scaling and CI/CD"    
+ 
+    2. Connect to GitHub
+        Login to GitHub
+        Create Repository RoboticLawnmower without License or Readme file
+        
+        # 4. Link local folder to your remote GitHub repo
+        git remote set-url origin https://github.com/gustavobaldocar/RoboticLawnmower.git
+        git remote -v
+        
+        # 5. Set the branch name to main
+        git branch -M main 
+
+        # 6. Push the code
+        git push -u origin main
