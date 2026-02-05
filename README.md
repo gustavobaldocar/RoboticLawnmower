@@ -184,12 +184,14 @@ input and output formats, allowing to focus only in the Logic.
 
 * The APP Entry Point Core Logic can be called by 2 different functions/modes: CLI and API.
 * Both modes receive input file in text format with test definitions. Here Example of a definition file:
-    `test_name="lawnmower_scenario01_valid"`
-    `height=5`
-    `width=5`
-    `rocks=[[1,1], [2,2], [3,3]]`
-    `start_pos=[0,0]`
-    `path=["Down", "Down", "Down", "Right", "Up", "Left"]`
+    ```
+    test_name="lawnmower_scenario01_valid"
+    height=5
+    width=5
+    rocks=[[1,1], [2,2], [3,3]]
+    start_pos=[0,0]
+    path=["Down", "Down", "Down", "Right", "Up", "Left"]
+    ```
 
 * The API Mode implements a browser UI which allows
 * Uploads .txt definitions to the backend for processing.
