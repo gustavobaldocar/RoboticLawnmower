@@ -1,0 +1,65 @@
+# Project: 
+# Automated Robotic Lawnmower Simulator
+#
+# File: ./docker/lawnmower_sim_dockerfile.dev
+#
+# Objectives: 
+#    Image Build
+#        Image is a snapshot of a configuration that can be run to form a Docker container
+#        It sets the working directory, copies docker requirements, installs dependencies 
+#        and then copies the application files (app/ directory)
+#        Then is run API specifying the ports
+#        Docker Images typically contains python:3.9-slim to keep the image lightweight
+#        To Build docker image: 
+#            docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .
+#	Cotainer
+#        An executing instantiation of the docker image
+#        Because Docker containers are "ephemeral", files will disappear as soon as container is deleted
+#        As such a mapping to host machne is required so the files can be kept 
+#        To Run Docker image in a container with host port and folder mapping to container 
+#        For API Mode (default specified in container Image spcedication
+#            docker run -p 8000:8000 -v ${PWD}/results:/app/outputs lawnmower_sim_docker_image
+#        For CLI Mode
+#            put this in front of python commands: 
+#                For CMD prompt       
+#                    docker run -p 8000:8000 -v ${PWD}/results:/app/outputs lawnmower_sim_docker_image
+#                For PowerShell
+#                    docker run -p 8000:8000 -v %cd%/results:/app/outputs lawnmower_sim_docker_image
+#
+# Author: gustavobaldocarvalho @ yahoo.com
+#
+# Version: 31.01.2026 - Creation
+
+# Use an official Python slim image for a smaller image
+FROM python:3.9-slim
+
+# Avoid Message Buffering
+ENV PYTHONUNBUFFERED=1
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy README to /app 
+COPY README.md .
+
+# Copy the docker requirements file to the container internal WORKDIR (/app)
+COPY ./docker/lawnmower_sim_docker_requirements.txt .
+
+# Install the libraries listed in requirements (from container WORKDIR folder)
+RUN pip install --no-cache-dir -r lawnmower_sim_docker_requirements.txt
+
+# Copy the tests folder to container internal WORKDIR
+COPY ./tests ./tests
+
+# Copy the python code to container internal WORKDIR
+COPY ./python ./python
+
+# Create container internal results folder
+RUN mkdir -p /app/results
+
+# Expose the container internal port to allow external connection to the FastAPI/Uvicorn
+EXPOSE 8000
+
+# Start App in API mode by default
+# Use 0.0.0.0 to allow connections from host outside the container
+CMD ["python", "./python/lawnmower_cli_api.py", "--api"]

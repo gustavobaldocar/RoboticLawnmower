@@ -1,0 +1,20 @@
+"""
+Project: 
+Automatic Lawnmower
+
+File: ./tests/lawnmower_scenario03_rock_crash.txt
+
+Objectives: 
+    Obstacle Test: Try a path that moves directly into a rock at [0,1] to verify Rock Crash detection.
+
+Author: gustavobaldocarvalho @ yahoo.com
+
+Version: 31.01.2026 - Creation
+"""
+
+test_name="lawnmower_scenario03_rock_crash"
+height=5
+width=5
+rocks=[[1,1], [2,2], [3,3]]
+start_pos=[0,0]
+path=["Down","Right"]

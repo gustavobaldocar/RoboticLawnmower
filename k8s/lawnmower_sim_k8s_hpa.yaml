@@ -1,0 +1,36 @@
+# Project: 
+# Automated Robotic Lawnmower Simulator
+#
+# File: ./k8s/lawnmower_sim_k8s_hpa.yaml
+#
+# Objectives: 
+#	Define K8s Horizontal Pod Autoscaler (HPA) manifest
+#	To Apply HPA: kubectl apply -f k8s
+#	To get HPA status: kubectl get hpa
+#
+# Author: gustavobaldocarvalho @ yahoo.com
+#
+# Version: 31.01.2026 - Creation
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: lawnmower-sim-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    # name must match the metadata name of deployment
+    name: lawnmower-sim-deployment 
+  # Never drop below min number of pods for reliability
+  minReplicas: 2   
+  # Scale up above max number of pods for reliability
+  maxReplicas: 10             
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        # Threshold for CPU usage % exceeded for starting Scale up
+        averageUtilization: 50 

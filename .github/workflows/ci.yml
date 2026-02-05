@@ -1,0 +1,61 @@
+# Project: 
+# Automated Robotic Lawnmower Simulator
+#
+# File: ./ci.yml
+#
+# Objectives: 
+#    automate the required linting and tests with CI pipeline
+#     The pipeline runs on every push or pull request to the main branches
+#    The "Static Type Check" step validates your type hints against the rules in mypy.ini
+#
+# Author: gustavobaldocarvalho @ yahoo.com
+#
+# Version: 31.01.2026 - Creation
+
+name: Lawnmower CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs: # This must be the root for all jobs
+  quality-assurance: # This is a job_id (indented once)
+    runs-on: ubuntu-latest # Indented twice
+    steps: # Indented twice
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r ./docker/lawnmower_sim_docker_requirements.txt
+          python -m pip install mypy pytest types-setuptools
+
+      - name: Static Type Check (mypy)
+        run: python -m mypy ./python
+
+      - name: Run Tests (pytest)
+        env:
+          # This tells Python to include the root folder in its search path
+          PYTHONPATH: .      
+        run: pytest ./python/lawnmower_sim_test.py
+
+  deploy-preparation: # This is the second job_id (same level as quality-assurance)
+    needs: quality-assurance # Only runs if the first job passes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Docker Image
+        run: docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .
+        
+      - name: Validate K8s Manifests
+        # Ensures your scalability config is ready
+        run: |
+          kubectl apply --dry-run=client -f ./k8s/lawnmower_sim_k8s_deployment.yaml
+          kubectl apply --dry-run=client -f ./k8s/lawnmower_sim_k8s_hpa.yaml        

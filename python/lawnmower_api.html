@@ -1,0 +1,293 @@
+<!-- Project:  -->
+<!-- Automated Robotic Lawnmower Simulator -->
+
+<!-- File: ./python/lawnmower_api.html -->
+
+<!-- Objectives:  -->
+    <!-- Define API Browser User interface Configuration -->
+    
+<!-- Author: gustavobaldocarvalho @ yahoo.com -->
+
+<!-- Version: 31.01.2026 - Creation -->
+
+<html>
+    <head>
+        <title>Automated Robotic Lawnmower Simulator</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+            /* Update the main container to a row */
+            .container { 
+                background: white; 
+                padding: 20px; 
+                border-radius: 12px; 
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+                display: flex; 
+                flex-direction: row; /* Horizontal layout */
+                gap: 30px; 
+                width: 95%; /* Wider to fit both panels */
+                max-width: 1100px;
+                align-items: flex-start;
+            }
+
+            /* Left side for the Grid */
+            .left-panel {
+                flex: 1.5; /* Takes more space for the canvas */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Right side for Controls and Results */
+            .right-panel {
+                flex: 1; /* Narrower for buttons and status */
+                display: flex;
+                flex-direction: column;
+                text-align: left;
+            }
+
+            /* Ensure canvas fits the panel */
+            #lawnCanvas { 
+                border: 2px solid #2c3e50; 
+                background-color: #ecf0f1; 
+                display: none; 
+                width: 100%; 
+                max-width: 500px; 
+            }
+
+            /* Make buttons a bit more compact */
+            .btn-run { margin: 10px 0; }
+          
+            .label { font-size: 0.85em; font-weight: bold; color: #34495e; text-transform: uppercase; margin-bottom: 8px; display: block; text-align: left; }
+            .file-card { margin-bottom: 20px; padding: 15px; border: 1px solid #dfe6e9; border-radius: 8px; background: #fafafa; text-align: left; box-sizing: border-box; }
+            
+            .file-display { background: #fff; border: 1px solid #dcdde1; padding: 10px; border-radius: 4px; color: #7f8c8d; font-style: italic; margin-bottom: 10px; min-height: 20px; display: flex; align-items: center; box-sizing: border-box; }
+            
+            /* Unified Button Style */
+            .btn { 
+                padding: 12px 0; 
+                border-radius: 6px; 
+                cursor: pointer; 
+                font-weight: bold; 
+                border: none; 
+                transition: opacity 0.2s; 
+                width: 100%; 
+                display: block; 
+                text-align: center; 
+                text-decoration: none;
+                box-sizing: border-box; /* Fixes the length discrepancy */
+            }
+            .btn-load { background-color: #3498db; color: white; }
+            
+            .btn-download { background-color: #2c3e50; color: #27ae60; display: none; } 
+            .btn:hover { opacity: 0.9; }
+            .btn-about {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #34495e;
+                color: white;
+                padding: 10px 18px;
+                border-radius: 6px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1000;
+                font-size: 0.9em;
+                border: none;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                transition: background 0.2s;
+            }
+            .btn-about:hover { background-color: #2c3e50; }
+
+            /* Hidden container for the README content */
+            #readmeContainer {
+                display: none;
+                position: fixed;
+                top: 10%;
+                left: 10%;
+                width: 80%;
+                height: 80%;
+                background: white;
+                z-index: 1001;
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 0 50px rgba(0,0,0,0.5);
+                overflow-y: auto;
+                text-align: left;
+                white-space: pre-wrap; /* Preserves formatting of the .md file */
+                font-family: monospace;
+            }
+            .close-readme {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                font-size: 2em;
+                cursor: pointer;
+                color: #e74c3c;
+            }
+
+            #lawnCanvas { border: 2px solid #2c3e50; margin-top: 20px; background-color: #ecf0f1; display: none; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto;}
+            .status-dashboard { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border: 2px solid #ddd; box-sizing: border-box; }
+            .idle { background-color: #f8f9fa; color: #6c757d; }
+            .crash { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+            .success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+            
+            #jsonContent, #readmeContent {
+                padding: 10px;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="left-panel">
+                <h1>Automated Robotic Lawnmower Simulator</h1>
+                <div id="statusResult" class="status-dashboard idle" style="width: 100%;">Ready: Run Test</div>
+                <canvas id="lawnCanvas"></canvas>
+            </div>
+
+            <div class="right-panel" style="margin-top: 20px;"> <div class="file-card">
+                    <span class="label">Input: Configuration File</span>
+                    <div id="fileName" class="file-display">No file selected</div>
+                    <label class="btn btn-load">
+                        Load Definition
+                        <input type="file" id="fileInput" style="display:none" onchange="updateInputName()">
+                    </label>
+                </div>
+
+                <button class="btn btn-run" style="background-color: #27ae60; color: white;" onclick="runSimulation()">Run Simulation</button>
+
+                <div class="file-card" id="outputCard">
+                    <span class="label">Output: Result File</span>
+                    <div id="jsonFileName" class="file-display">Waiting...</div>
+                    <button id="downloadBtn" class="btn btn-download" onclick="openJson()">Download Result</button>
+                    <button id="viewBtn" class="btn" style="background-color: #34495e; color: white; margin-top: 10px; display: none;" onclick="viewJsonResult()">View Full JSON Result</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-about" onclick="loadReadme()">ABOUT</button>
+
+        <div id="readmeContainer">
+            <span class="close-readme" onclick="document.getElementById('readmeContainer').style.display='none'">&times;</span>
+            <div id="readmeContent">Loading...</div>
+        </div>
+
+        <div id="jsonContainer" style="display: none; position: fixed; top: 10%; left: 10%; width: 80%; height: 80%; background: white; z-index: 1001; padding: 40px; border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.5); overflow-y: auto; text-align: left; white-space: pre-wrap; font-family: monospace;">
+            <span class="close-readme" onclick="document.getElementById('jsonContainer').style.display='none'" style="position: absolute; top: 10px; right: 20px; font-size: 2em; cursor: pointer; color: #e74c3c;">&times;</span>
+            <div id="jsonContent">Loading...</div>
+        </div>
+
+        <script>
+            let lastJsonResponse = null;
+
+            function updateInputName() {
+                const file = document.getElementById('fileInput').files[0];
+                document.getElementById('fileName').textContent = file ? file.name : "No file selected";
+            }
+
+            async function runSimulation() {
+                const fileInput = document.getElementById('fileInput');
+                if (!fileInput.files[0]) return alert("Please load an input file first!");
+
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+
+                const response = await fetch("/simulate", { method: "POST", body: formData });
+                lastJsonResponse = await response.json();
+
+                updateUI(lastJsonResponse);
+                drawLawn(lastJsonResponse);
+            }
+
+            function openJson() {
+                const filename = document.getElementById('jsonFileName').textContent;
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastJsonResponse, null, 4));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", filename);
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            }
+
+            function drawLawn(data) {
+                const canvas = document.getElementById('lawnCanvas');
+                canvas.style.display = "block";
+                const ctx = canvas.getContext('2d');
+                const cellSize = 50;
+                canvas.width = data.grid_width * cellSize;
+                canvas.height = data.grid_height * cellSize;
+
+                ctx.fillStyle = "#2ecc71";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = "#27ae60";
+                ctx.beginPath();
+                for(let i=0; i<=data.grid_width; i++) { ctx.moveTo(i*cellSize, 0); ctx.lineTo(i*cellSize, canvas.height); }
+                for(let j=0; j<=data.grid_height; j++) { ctx.moveTo(0, j*cellSize); ctx.lineTo(canvas.width, j*cellSize); }
+                ctx.stroke();
+
+                ctx.fillStyle = "#7f8c8d";
+                data.rock_locations.forEach(rock => {
+                    ctx.fillRect(rock[1]*cellSize + 5, rock[0]*cellSize + 5, cellSize - 10, cellSize - 10);
+                });
+
+                ctx.beginPath();
+                ctx.strokeStyle = "#e67e22";
+                ctx.lineWidth = 4;
+                data.pos_history.forEach((pos, index) => {
+                    const x = pos[1] * cellSize + cellSize/2;
+                    const y = pos[0] * cellSize + cellSize/2;
+                    if(index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+            }
+            
+            async function loadReadme() {
+                const container = document.getElementById('readmeContainer');
+                const content = document.getElementById('readmeContent');
+                container.style.display = 'block';
+
+                try {
+                    // Fetching the README.md file relative to the current server URL
+                    const response = await fetch('/README.md');
+                    if (!response.ok) throw new Error('Could not find README.md');
+                    
+                    const text = await response.text();
+                    content.textContent = text; // Preserves plain text formatting
+                } 
+                catch (error) {
+                    content.innerHTML = `<p style="color:red">Error loading README: ${error.message}</p>
+                                         <p>Ensure README.md is in the project root/static folder.</p>`;
+                }
+            }
+            
+            function viewJsonResult() {
+                if (!lastJsonResponse) return alert("No simulation data available!");
+                
+                const container = document.getElementById('jsonContainer');
+                const content = document.getElementById('jsonContent');
+                
+                // Format the JSON with 4-space indentation for readability
+                content.textContent = JSON.stringify(lastJsonResponse, null, 4);
+                container.style.display = 'block';
+            }
+
+            // Update your existing updateUI function to show the new view button
+            function updateUI(data) {
+                const statusDiv = document.getElementById('statusResult');
+                const downloadBtn = document.getElementById('downloadBtn');
+                const viewBtn = document.getElementById('viewBtn'); // New reference
+                const jsonNameDisplay = document.getElementById('jsonFileName');
+                
+                statusDiv.className = "status-dashboard " + (data.did_mower_crash ? "crash" : "success");
+                statusDiv.textContent = data.did_mower_crash ? "Status: " + data.crash_reason : "Status: SUCCESS - All Grass Cut!";
+                
+                downloadBtn.style.display = "block";
+                viewBtn.style.display = "block"; // Show the view button
+                jsonNameDisplay.textContent = (data.test_name || "simulation_result") + ".json";
+                jsonNameDisplay.style.fontStyle = "normal";
+                jsonNameDisplay.style.color = "#2c3e50";
+            }            
+        </script>       
+    </body>        
+</html>

@@ -1,0 +1,20 @@
+"""
+Project: 
+Automatic Lawnmower
+
+File: ./tests/lawnmower_scenario01_valid.txt
+
+Objectives: 
+    Test Automatic Lawnmower valid Path
+
+Author: gustavobaldocarvalho @ yahoo.com
+
+Version: 31.01.2026 - Creation
+"""
+
+test_name="lawnmower_scenario01_valid"
+height=5
+width=5
+rocks=[[1,1], [2,2], [3,3]]
+start_pos=[0,0]
+path=["Down", "Down", "Down", "Right", "Up", "Left"]
