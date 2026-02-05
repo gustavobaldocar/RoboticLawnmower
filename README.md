@@ -81,22 +81,22 @@ Core Engine and App Logic.
 ### Folder Structure
 
 * Requirements:
-* **`./requirements`**: Contains the requirements document
+* **`./requirements`**: Contains the requirements document  
 
 * Python Code:
-* **`./python`**: Contains the core simulation engine (`lawnmower_sim.py`), unit tests for core logic (`lawnmower_sim_test.py`) and the unified APP-API/CLI entry point Logic (`lawnmower_cli_api.py`) and also browser UI definitions (`lawnmower_api.html`)
+* **`./python`**: Contains the core simulation engine (`lawnmower_sim.py`), unit tests for core logic (`lawnmower_sim_test.py`) and the unified APP-API/CLI entry point Logic (`lawnmower_cli_api.py`) and also browser UI definitions (`lawnmower_api.html`)  
 
 * Simulator Tests:
-* **`./tests`**:  Contains various scenario configuration `.txt` files.
+* **`./tests`**:  Contains various scenario configuration `.txt` files.  
 
 * Simulator Results:
-* **`./results`**: The local output directory where simulation results are saved as timestamped `.json` files.
+* **`./results`**: The local output directory where simulation results are saved as timestamped `.json` files.  
 
 * Docker:
-* **`./docker`**: Contains the Dockerfile definition and the Docker environment requirements.
+* **`./docker`**: Contains the Dockerfile definition and the Docker environment requirements.  
 
 * Kubernetes:
-* **`./k8s`**: Contains Kubernetes manifests, including Deployment, Service, and Horizontal Pod Autoscaler (HPA) configurations.
+* **`./k8s`**: Contains Kubernetes manifests, including Deployment, Service, and Horizontal Pod Autoscaler (HPA) configurations.  
 
 * Root folder files:
 * `README.md` file
@@ -418,7 +418,7 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
         `kubectl top pods`  
         number of pods might change
     * Terminal4,5,6,7...: Generate Load in as many terminal needed to trigger scaling of pods
-        # Get a valid test file from your project
+        ```# Get a valid test file from your project
         $testFile = "./tests/lawnmower_scenario01_valid.txt"
         $url = "http://localhost:8000/simulate"
 
@@ -427,7 +427,7 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
             curl.exe -X POST $url -F "file=@$testFile"
             
             Write-Host "`nRequest sent at $(Get-Date)" -ForegroundColor Green
-        }
+        }```
 
 ### Design to Requirements Traceability
         
