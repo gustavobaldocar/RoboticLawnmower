@@ -1,9 +1,8 @@
 # Project: 
 ## Automated Robotic Lawnmower Simulator - MVP with K8s Scaling and CI/CD
 
-## Author: gustavobaldocarvalho @ yahoo.com
-
-### Version: 31.01.2026 - Creation
+### Author: gustavobaldocarvalho @ yahoo.com
+#### Version: 31.01.2026 - Creation
 
 ---
 
