@@ -51,6 +51,9 @@ jobs: # This must be the root for all jobs
     needs: quality-assurance # Only runs if the first job passes
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+    
       - name: Build Docker Image
         run: docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .
         
