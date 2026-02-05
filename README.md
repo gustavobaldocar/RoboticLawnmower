@@ -465,10 +465,12 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
     * Kubernetes & Scaling: Provides manifests for K8s deployment with a Horizontal Pod Autoscaler (HPA) that scales from 2 to 10 replicas based on CPU load.
     * Concurrency: Uses uvicorn with multiple workers to handle high-traffic simulation requests.
     
-* Discrepancies and Future Development
+* Limitations, Discrepancies and Future Development
     * Input Error Handling: As noted in code, input validation was descoped for the MVP. 
     * While acceptable for an MVP, adding basic checks for malformed .txt files would 
     enhance the "User Experience" criteria.
+    * GitHub CD implementation higly depending on host k8s setup, therefore I decided to 
+    disabled it in ci.yml. GitHub will therefore not perform CD for k8s, only Docker.
 
 ## Git Project Storage and Repository
 

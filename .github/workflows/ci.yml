@@ -57,8 +57,8 @@ jobs: # This must be the root for all jobs
       - name: Build Docker Image
         run: docker build -f ./docker/lawnmower_sim_dockerfile.dev -t lawnmower_sim_docker_image .
         
-      - name: Validate K8s Manifests
+      #- name: Validate K8s Manifests
         # Ensures your scalability config is ready
-        run: |
-          kubectl apply --dry-run=client -f ./k8s/lawnmower_sim_k8s_deployment.yaml
-          kubectl apply --dry-run=client -f ./k8s/lawnmower_sim_k8s_hpa.yaml        
+        #run: |
+          #kubectl apply --dry-run=client --validate=false -f ./k8s/lawnmower_sim_k8s_deployment.yaml
+          #kubectl apply --dry-run=client --validate=false -f ./k8s/lawnmower_sim_k8s_hpa.yaml        
