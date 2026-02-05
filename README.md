@@ -519,6 +519,8 @@ block in the ci.yml, it will fail because it tries to execute the Docker and k8s
     * Push the code from Local to Repo
     ```git push -u origin main --force```
     
+    * Check GitHub Status Green after CI/CD executed (Takes some time)
+    
     * Pull the code from Repo to Local (For the 1st time)
     ```git clone https://github.com/gustavobaldocar/RoboticLawnmower.git```
     
